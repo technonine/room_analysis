@@ -11,6 +11,8 @@ process_image("alt_room_plan_vanilla_with_safespace.png")
 
 process_image("alt_room_plan_cookie_dough_no_safespace.png")
 process_image("alt_room_plan_cookie_dough_with_safespace.png")
+process_image("alt_room_plan_cookie_dough_sprinkles_no_safespace.png")
+process_image("alt_room_plan_cookie_dough_sprinkles_with_safespace.png")
 
 process_image("alt_room_plan_fanaat_no_safespace.png")
 process_image("alt_room_plan_fanaat_with_safespace.png")
