@@ -12,3 +12,5 @@ The pictures where generated using paint.net, however any modern photo editor th
 `pixel_functions.py` has the actual functions used, in case one wants to audit them.
 `test.py` has a variety of functions to test the output of functions and other information. 
 
+# folder locallity
+it is important that the script and any pictures used are located in the same folder. 
