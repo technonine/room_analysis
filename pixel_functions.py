@@ -5,10 +5,15 @@ red = [30, 27, 153]  # marker color Fanaat (in BGR order, not RGB!)
 yellow = [49, 215, 248]  # marker color Bellettrie (in BGR order, not RGB!)
 green = [0, 255, 0]  # marker color Neutral (in BGR order, not RGB!)
 
+fanaat = 0
+bellettrie = 1
+shared = 2
+unassigned = 3
 
-def compare_triplet(a, b) -> bool:
+
+def compare_colour(a, b) -> bool:
     """
-    Spagetthi code function to compile arrays in a naive way
+    Naive code function to compare arrays in a naive way
     :param a: First 1d array
     :param b: Second 1d array
     :return: true if the arrays are the same size and have the same values.
@@ -34,15 +39,14 @@ def count_image(imname: str) -> list:
 
     for i in range(0, img.shape[0]):  # Iterate over all rows
         for j in range(0, img.shape[1]):  # Iterate over each row entry
-            for k in range(0, 2):
-                if compare_triplet(img[i, j], red):
-                    counters[0] += 1
-                elif compare_triplet(img[i, j], yellow):
-                    counters[1] += 1
-                elif compare_triplet(img[i, j], green):
-                    counters[2] += 1
-                else:
-                    counters[3] += 1
+            if compare_colour(img[i, j], red):
+                counters[fanaat] += 1
+            elif compare_colour(img[i, j], yellow):
+                counters[bellettrie] += 1
+            elif compare_colour(img[i, j], green):
+                counters[shared] += 1
+            else:
+                counters[unassigned] += 1
     return counters  # [Red count, yellow count, green count, other count]
 
 
@@ -52,23 +56,28 @@ def prettify_counters(counters: list):
     :param counters: The 1d length 4 array of counters outputted by function count_image
     :return: Nothing
     """
-    Fanaat_ratio_percentage = (counters[0] / (counters[0] + counters[1]))
-    Bellettrie_ratio_percentage = (counters[1] / (counters[0] + counters[1]))
-    print("Fanaat/Bellettrie Ratio: {0:.2%} / {1:.2%}".format(Fanaat_ratio_percentage, Bellettrie_ratio_percentage))
+    Fanaat_ratio_percentage = (counters[fanaat] / (counters[fanaat] + counters[bellettrie]))
+    Bellettrie_ratio_percentage = (counters[bellettrie] / (counters[fanaat] + counters[bellettrie]))
+    print("Fanaat/Bellettrie Ratio Exclusive: {0:.2%} / {1:.2%}".format(Fanaat_ratio_percentage, Bellettrie_ratio_percentage))
 
-    total = (counters[0] + counters[1] + counters[2])
-    Fanaat_total_percentage = (counters[0] / total)
-    Bellettrie_total_percentage = (counters[1] / total)
-    Shared_total_percentage = (counters[2] / total)
-
-
+    total = (counters[fanaat] + counters[bellettrie] + counters[shared])
+    print("Fanaat/Bellettrie Ratio total room usage: {:.2%} / {:.2%}".format((counters[fanaat]+counters[shared])/total, (counters[bellettrie]+counters[shared])/total))
+    Fanaat_total_percentage = (counters[fanaat] / total)
+    Bellettrie_total_percentage = (counters[bellettrie] / total)
+    Shared_total_percentage = (counters[shared] / total)
 
     print("Room Usage: \n-  Fanaat: {0:.2%} \n-  Bellettrie: {1:.2%} \n-  Shared: {2:.2%}".format(Fanaat_total_percentage,
-                                                                                              Bellettrie_total_percentage,
-                                                                                              Shared_total_percentage))
-    print("Resolution per pixel: {:.3f} cm \n".format(math.sqrt(202.3/total)*100))
+                                                                                                  Bellettrie_total_percentage,
+                                                                                                  Shared_total_percentage))
+    print("Resolution per pixel: {:.3f} cm".format(math.sqrt(202.3/total)*100))
 
 
 def process_image(imname: str):
     print(imname)
     prettify_counters(count_image(imname))
+    print("\n")
+
+
+
+
+
