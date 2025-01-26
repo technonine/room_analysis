@@ -61,11 +61,12 @@ def prettify_counters(counters: list):
     Bellettrie_total_percentage = (counters[1] / total)
     Shared_total_percentage = (counters[2] / total)
 
-    # TODO report resolution
 
-    print("Room Usage: \n-  Fanaat: {0:.2%} \n-  Bellettrie: {1:.2%} \n-  Shared: {2:.2%}\n".format(Fanaat_total_percentage,
+
+    print("Room Usage: \n-  Fanaat: {0:.2%} \n-  Bellettrie: {1:.2%} \n-  Shared: {2:.2%}".format(Fanaat_total_percentage,
                                                                                               Bellettrie_total_percentage,
                                                                                               Shared_total_percentage))
+    print("Resolution per pixel: {:.3f} cm \n".format(math.sqrt(202.3/total)*100))
 
 
 def process_image(imname: str):
