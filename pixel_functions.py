@@ -50,7 +50,7 @@ def count_image(imname: str) -> list:
     return counters  # [Red count, yellow count, green count, other count]
 
 
-def prettify_counters(counters: list):
+def prettify_counters(counters: list, latex_output: bool = False):
     """
     Provides nice statistics tables from the raw numbers.
     :param counters: The 1d length 4 array of counters outputted by function count_image
@@ -71,6 +71,28 @@ def prettify_counters(counters: list):
                                                                                                   Shared_total_percentage))
     print("Resolution per pixel: {:.3f} cm".format(math.sqrt(202.3/total)*100))
 
+    if latex_output:
+        print('''\\begin{{longtable}}[{{c}}]{{l|ll}}
+                  {0}  & Fanaat & Bellettrie \\\\\hline
+\endfirsthead
+%
+\endhead
+%
+Exclusive Ratio \%  & {1}   & {2}       \\\\
+Total room usage \% & {3}   & {4} \\\\
+
+\caption{{Pixel counts on current layout floorplan before and after normalization and the percentile difference for each association.}}
+\label{{tab:Normalization}}\\\\
+\end{{longtable}} '''.format("Filename", Fanaat_ratio_percentage, Bellettrie_ratio_percentage, (counters[fanaat]+counters[shared])/total, (counters[bellettrie]+counters[shared])/total))
+
+        print('''
+        Room usage:
+        \\begin{{enumerate}}
+        \\item  Fanaat: {}
+        \\item Bellettrie: {}
+        \\item Shared: {}
+        \\end{{enumerate}}
+        '''.format(counters[fanaat] / total, counters[bellettrie] / total, counters[shared] / total)
 
 def process_image(imname: str):
     print(imname)

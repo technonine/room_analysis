@@ -26,8 +26,13 @@ print("Thus each pixel represents a square of {:.2f} cm each side \n".format(mat
 
 # commented out debug stuff if you want to test if count_image and prettify_counters works
 # Gives you raw numbers so you can run the math yourself if tempted
-testrun_counts = count_image("current_room_state_no_safespace.png")
+print("Pre Normalization")
+print(count_image("current_closets_no_safespace_pre_normalization.png"))
+print("Post Normalization")
+testrun_counts = count_image("current_closets_no_safespace_normalized.png")
 print(testrun_counts)
 print(prettify_counters(testrun_counts))
+
+
 
 
