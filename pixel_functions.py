@@ -53,6 +53,7 @@ def count_image(imname: str) -> list:
 def prettify_counters(counters: list, latex_output: bool = False):
     """
     Provides nice statistics tables from the raw numbers.
+    :param latex_output: if true also outputs data in a latex compatible format
     :param counters: The 1d length 4 array of counters outputted by function count_image
     :return: Nothing
     """
@@ -73,17 +74,17 @@ def prettify_counters(counters: list, latex_output: bool = False):
 
     if latex_output:
         print('''\\begin{{longtable}}[{{c}}]{{l|ll}}
-                  {0}  & Fanaat & Bellettrie \\\\\hline
-\endfirsthead
+                  {0}  & Fanaat & Bellettrie \\\\ \\hline
+\\endfirsthead
 %
-\endhead
+\\endhead
 %
-Exclusive Ratio \%  & {1}   & {2}       \\\\
-Total room usage \% & {3}   & {4} \\\\
+Exclusive Ratio \\%  & {1}   & {2}       \\\\
+Total room usage \\% & {3}   & {4} \\\\
 
-\caption{{Pixel counts on current layout floorplan before and after normalization and the percentile difference for each association.}}
-\label{{tab:Normalization}}\\\\
-\end{{longtable}} '''.format("Filename", Fanaat_ratio_percentage, Bellettrie_ratio_percentage, (counters[fanaat]+counters[shared])/total, (counters[bellettrie]+counters[shared])/total))
+\\caption{{Pixel counts on current layout floorplan before and after normalization and the percentile difference for each association.}}
+\\label{{tab:Normalization}}\\\\
+\\end{{longtable}} '''.format("Filename", Fanaat_ratio_percentage, Bellettrie_ratio_percentage, (counters[fanaat]+counters[shared])/total, (counters[bellettrie]+counters[shared])/total))
 
         print('''
         Room usage:
@@ -92,7 +93,8 @@ Total room usage \% & {3}   & {4} \\\\
         \\item Bellettrie: {}
         \\item Shared: {}
         \\end{{enumerate}}
-        '''.format(counters[fanaat] / total, counters[bellettrie] / total, counters[shared] / total)
+        '''.format(counters[fanaat] / total, counters[bellettrie] / total, counters[shared] / total))
+
 
 def process_image(imname: str):
     print(imname)
