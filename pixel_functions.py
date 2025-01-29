@@ -96,9 +96,9 @@ Total room usage \\% & {3}   & {4} \\\\
         '''.format(counters[fanaat] / total, counters[bellettrie] / total, counters[shared] / total))
 
 
-def process_image(imname: str):
+def process_image(imname: str, latex_output: bool = False):
     print(imname)
-    prettify_counters(count_image(imname))
+    prettify_counters(count_image(imname), latex_output)
     print("\n")
 
 
