@@ -50,55 +50,68 @@ def count_image(imname: str) -> list:
     return counters  # [Red count, yellow count, green count, other count]
 
 
-def prettify_counters(counters: list, latex_output: bool = False):
+def prettify_counters(counters: list, latex_output: bool = False, imname:str = ""):
     """
     Provides nice statistics tables from the raw numbers.
+    :param imname: Optional parameter required if latex_output is set to True.
     :param latex_output: if true also outputs data in a latex compatible format
     :param counters: The 1d length 4 array of counters outputted by function count_image
     :return: Nothing
     """
+
     Fanaat_ratio_percentage = (counters[fanaat] / (counters[fanaat] + counters[bellettrie]))
     Bellettrie_ratio_percentage = (counters[bellettrie] / (counters[fanaat] + counters[bellettrie]))
-    print("Fanaat/Bellettrie Ratio Exclusive: {0:.2%} / {1:.2%}".format(Fanaat_ratio_percentage, Bellettrie_ratio_percentage))
+    if not latex_output: print("Fanaat/Bellettrie Ratio Exclusive: {0:.2%} / {1:.2%}".format(Fanaat_ratio_percentage, Bellettrie_ratio_percentage))
 
     total = (counters[fanaat] + counters[bellettrie] + counters[shared])
-    print("Fanaat/Bellettrie Ratio total room usage: {:.2%} / {:.2%}".format((counters[fanaat]+counters[shared])/total, (counters[bellettrie]+counters[shared])/total))
+    if not latex_output: print("Fanaat/Bellettrie Ratio total room usage: {:.2%} / {:.2%}".format((counters[fanaat]+counters[shared])/total, (counters[bellettrie]+counters[shared])/total))
     Fanaat_total_percentage = (counters[fanaat] / total)
     Bellettrie_total_percentage = (counters[bellettrie] / total)
     Shared_total_percentage = (counters[shared] / total)
 
-    print("Room Usage: \n-  Fanaat: {0:.2%} \n-  Bellettrie: {1:.2%} \n-  Shared: {2:.2%}".format(Fanaat_total_percentage,
+    if not latex_output: print("Room Usage: \n-  Fanaat: {0:.2%} \n-  Bellettrie: {1:.2%} \n-  Shared: {2:.2%}".format(Fanaat_total_percentage,
                                                                                                   Bellettrie_total_percentage,
                                                                                                   Shared_total_percentage))
-    print("Resolution per pixel: {:.3f} cm".format(math.sqrt(202.3/total)*100))
+    if not latex_output: print("Resolution per pixel: {:.3f} cm".format(math.sqrt(202.3/total)*100))
 
     if latex_output:
         print('''\\begin{{longtable}}[{{c}}]{{l|ll}}
-                  {0}  & Fanaat & Bellettrie \\\\ \\hline
-\\endfirsthead
-%
-\\endhead
-%
-Exclusive Ratio \\%  & {1}   & {2}       \\\\
-Total room usage \\% & {3}   & {4} \\\\
+            \\verb|{0}|  & Fanaat & Bellettrie \\\\ \\hline
+            \\endfirsthead
+            %
+            \\endhead
+            %
+            Exclusive Ratio \\%  & {1:.2%}   & {2:.2%}       \\\\
+            Total room usage \\% & {3:.2%}   & {4:.2%} \\\\
 
-\\caption{{Pixel counts on current layout floorplan before and after normalization and the percentile difference for each association.}}
-\\label{{tab:Normalization}}\\\\
-\\end{{longtable}} '''.format("Filename", Fanaat_ratio_percentage, Bellettrie_ratio_percentage, (counters[fanaat]+counters[shared])/total, (counters[bellettrie]+counters[shared])/total))
+            \\caption{{Pixel counts on current layout floorplan before and after normalization and the percentile difference for each association.}}
+            \\\\
+            \\end{{longtable}} '''.format(imname, Fanaat_ratio_percentage, Bellettrie_ratio_percentage, (counters[fanaat]+counters[shared])/total, (counters[bellettrie]+counters[shared])/total))
 
         print('''
         Room usage:
         \\begin{{enumerate}}
-        \\item  Fanaat: {}
-        \\item Bellettrie: {}
-        \\item Shared: {}
+        \\item  Fanaat: {:.2%}
+        \\item Bellettrie: {:.2%}
+        \\item Shared: {:.2%}
         \\end{{enumerate}}
         '''.format(counters[fanaat] / total, counters[bellettrie] / total, counters[shared] / total))
 
 
 def process_image(imname: str, latex_output: bool = False):
-    print(imname)
-    prettify_counters(count_image(imname), latex_output)
+    if not latex_output:
+        print(imname)
+    if latex_output:
+        print('''
+        \\begin{{figure}}[htp]
+        \\center
+        \\includegraphics[height=0.1\\pageheight]{{{0}}}
+        \\caption{{{1}}}
+        \\label{{fig:{0}}}
+        \\end{{figure}}
+        '''.format(imname, imname.replace("_", " ")))
+        print("These tables relate to the picture in figure \\ref{{{0}}}.".format(imname))
+    prettify_counters(count_image(imname), latex_output, imname)
     print("\n")
 
 
