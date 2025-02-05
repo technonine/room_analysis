@@ -110,7 +110,7 @@ def process_image(imname: str, latex_output: bool = False):
         \\label{{fig:{0}}}
         \\end{{figure}}
         '''.format(imname, imname.replace("_", " ")))
-        print("These tables relate to the picture in figure \\ref{{{0}}}.".format(imname))
+        print("These tables relate to the picture in figure \\ref{{fig:{0}}}.".format(imname))
     prettify_counters(count_image(imname), latex_output, imname)
     print("\n")
 
